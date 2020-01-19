@@ -15,10 +15,6 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
-    @ManyToOne
-    @JoinColumn(name = "test_id")
-    private Test test;
-
     public Long getId() {
         return id;
     }

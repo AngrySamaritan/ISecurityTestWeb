@@ -34,7 +34,7 @@ public class Answer {
         this.question = question;
     }
 
-    public Boolean getRight() {
+    public Boolean isRight() {
         return isRight;
     }
 
