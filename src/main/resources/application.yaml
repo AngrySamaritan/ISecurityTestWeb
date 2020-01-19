@@ -1,0 +1,12 @@
+spring:
+  jpa:
+
+    hibernate:
+      ddl-auto: create
+    database: mysql
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/security_test
+    username: securityTestApp
+    password: RReWe232ewWs23$WdwJBG@32W#232#W
