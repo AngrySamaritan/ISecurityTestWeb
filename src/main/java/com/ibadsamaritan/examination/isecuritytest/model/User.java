@@ -1,6 +1,7 @@
 package com.ibadsamaritan.examination.isecuritytest.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "usr")
@@ -30,6 +31,9 @@ public class User {
 
     @Column(name = "confirmation_code")
     private String confirmationCode;
+
+    @OneToMany(mappedBy = "user")
+    List<TestResult> results;
 
     public Boolean getConfirmed() {
         return isConfirmed;
