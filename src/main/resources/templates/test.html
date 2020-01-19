@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BadSamaritan Information Security Test</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+<th:block th:class="moodal-header" th:include="navbar_guest">
+</th:block>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8"><h1>Information security test by IBadSamaritan</h1></div>
+        <div class="col-2"></div>
+    </div>
+</div>
+
+<th:block th:each="question, qIt: ${questions}">
+    <form class="question" th:id="${qIt}">
+        <div class="container">
+            <div class="row"><h3 th:text="'Question ' + ${qIt} + ':'"></h3></div>
+            <div class="row"><p th:text="${question.getText()}"></p></div>
+            <div class="container" th:each="answer, aIt: ${question.getAnswers()}">
+                <div class="row">
+                    <div class="col-3" th:if="${question.getType() == 'RADIO'}">
+                        <input type="radio" th:value="${qIt} * 100 + ${answer.getId()}">
+                    </div>
+                    <div class="col-3" th:if="${question.getType() == 'CHECKBOX'}">
+                        <input type="checkbox" class="answer" th:value="${answer.getId()}">
+                    </div>
+                    <div class="col-1"><h5 th:text="${aIt}"></h5></div>
+                    <div class="col-8"><h5 th:text="${answer.getText()}"></h5></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</th:block>
+<button type="submit" title="Submit">Submit</button>
+
+<script>
+    function submit() {
+        let answers = [];
+        $.each($('.question'), function () {
+            let $form = this;
+            let checked = [];
+            $.each($form.find('.answer'), function () {
+                if (this.attr("checked")) {
+                    checked.push(this.value())
+                }
+            });
+            let id = $form.attr('id');
+            let map = new Map();
+            map.set(id, checked);
+            answers.push(map);
+        });
+
+    //    TODO: add Ajax post to server;
+    }
+</script>
+
+
+</body>
+</html>

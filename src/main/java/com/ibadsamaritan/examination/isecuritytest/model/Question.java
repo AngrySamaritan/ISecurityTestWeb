@@ -15,6 +15,29 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
+    @Column(name = "text")
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private Type type;
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     public Long getId() {
         return id;
     }

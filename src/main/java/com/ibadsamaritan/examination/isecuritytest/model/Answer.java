@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "answers")
 public class Answer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "answer_id")
@@ -17,6 +18,17 @@ public class Answer {
 
     @Column(name = "is_right")
     private Boolean isRight;
+
+    @Column(name = "text")
+    private String text;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public Long getId() {
         return id;
@@ -34,7 +46,7 @@ public class Answer {
         this.question = question;
     }
 
-    public Boolean isRight() {
+    public Boolean getRight() {
         return isRight;
     }
 
@@ -42,3 +54,4 @@ public class Answer {
         isRight = right;
     }
 }
+
