@@ -1,0 +1,11 @@
+USE security_test;
+DELETE FROM questions;
+DELETE FROM answers;
+INSERT INTO questions(question_id, text, type) VALUES(1, 'The most dangerous type of corrupted soft is', 'RADIO');
+INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (0, 'Trojan', true, 1);
+INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (1, 'Worm', false, 1);
+INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (2, 'Spy soft', false, 1);
+INSERT INTO questions(question_id, text, type) VALUES(2, 'The most common authentication type is', 'RADIO');
+INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (3, 'Static password', true, 2);
+INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (4, 'Dynamic password', false, 2);
+INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (5, 'PKI systems', false, 2);
