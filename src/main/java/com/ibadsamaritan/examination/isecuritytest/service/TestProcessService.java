@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,8 @@ public class TestProcessService {
     public String processAnswers(String answers) throws NoSuchAnswerException {
         JSONObject response = new JSONObject();
         response.put("result", getResult(new JSONArray(answers)));
+        List<Question> questionCount = (List<Question>) questionRepo.findAll();
+        response.put("questions_count", questionCount.size());
         response.put("answers", getAllAnswers());
         return response.toString();
     }

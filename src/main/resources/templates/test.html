@@ -18,15 +18,14 @@
             crossorigin="anonymous"></script>
 
 </head>
-<body>
+<body id="body">
 
-<th:block th:class="moodal-header" th:include="navbar_guest">
-</th:block>
-
-<div class="container-fluid">
+<div th:include="navbar_index">
+</div>
+<div class="container-fluid" style="margin-top: 20vh">
     <div class="row">
         <div class="col-2"></div>
-        <div class="col-8"><h1>Information security test by AngrySamaritan</h1></div>
+        <div class="col-8"><h1 style="alignment: center">Information security test by AngrySamaritan</h1></div>
         <div class="col-2"></div>
     </div>
     <div class="row" style="margin-top: 10vh"></div>
@@ -34,20 +33,24 @@
 
 <th:block th:each="question, qIt: ${questions}">
     <form class="question" th:id="${question.getId()}">
+        <hr>
         <div class="container">
-            <div class="row"><h3 th:text="'Question ' + ${qIt.count} + ':'"></h3></div>
+            <div class="row"><h3><b th:text="'Question ' + ${qIt.count} + ':'"></b></h3></div>
             <div class="row"><h4 th:text="${question.getText()}"></h4></div>
-            <div class="container" th:each="answer, aIt: ${question.getAnswers()}">
-                <div class="row">
+            <div class="container-fluid" th:each="answer, aIt: ${question.getAnswers()}">
+                <div class="row" style="vertical-align: center; " th:id="'answer' + ${answer.getId()}">
                     <div class="col-1"
                          th:if="${question.getType()} == ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).RADIO}">
-                        <input type="radio" th:name="'answer2question' + ${qIt.index}"
+                        <input style="align-items: center" type="radio" th:name="'answer2question' + ${qIt.index}"
                                th:class="'answer2question' + ${question.getId()}"
-                               th:value="${answer.getId()}">
+                               th:value="${answer.getId()}"
+                               th:id="'checker' + ${answer.getId()}">
                     </div>
                     <div class="col-1"
                          th:if="${question.getType()} == ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).CHECKBOX}">
-                        <input type="checkbox" class="answer" th:value="${answer.getId()}">
+                        <input type="checkbox" th:class="'answer2question' + ${question.getId()}"
+                               th:value="${answer.getId()}"
+                               th:id="'checker' + ${answer.getId()}">
                     </div>
                     <div class="col-8"><h5 th:text="${aIt.index + 1} + '.' + ${answer.getText()}"></h5></div>
                 </div>
@@ -55,11 +58,12 @@
         </div>
     </form>
 </th:block>
-<div class="container-fluid align-content-center" style="margin-top: 45vh">
+<hr>
+<div class="container-fluid align-content-center" style="margin-top: 10vh; margin-bottom: 10vh;">
     <div class="row">
         <div class="col-4"></div>
-        <div class="col-4">
-            <button class="btn btn-success" title="Submit" onclick="submit()">Submit</button>
+        <div class="col-4" id="result">
+            <button id="btn-success" class="btn btn-success" style="width: 20vw; height: 7vh; text-align: center" title="Submit" onclick="submit()">Submit</button>
         </div>
         <div class="col-4"></div>
     </div>
@@ -67,23 +71,32 @@
 
 
 <script>
+    let submitted = false;
+    const rightColor = 'rgba(119,255,50,0.64)';
+    const wrongColor = 'rgba(255,8,0,0.64)';
+
     function submit() {
+        if (!submitted) {
+            submitted = false;
+            let userAnswers = getUserAnswers();
+            let data = JSON.stringify(userAnswers);
 
-        let userAnswers = getUserAnswers();
-        let data = JSON.stringify(userAnswers);
-
-        $.ajax({
-            type: "POST",
-            url: "/test",
-            data: {
-                "data": data
-            },
-            dataType: "json",
-            success: function (data, status, jqXHR) {
-                alert("You gave " + data['result'] + " right answers");
-                lightAnswers(userAnswers, data['answers'])
-            },
-        });
+            $.ajax({
+                type: "POST",
+                url: "/test",
+                data: {
+                    "data": data
+                },
+                dataType: "json",
+                success: function (data, status, jqXHR) {
+                    lightAnswers(userAnswers, data['answers']);
+                    $('<div class="h4" style="color: green"> You gave ' + data["result"] + ' of '
+                        + data["questions_count"] + ' right answers! </div>').appendTo("#result");
+                    $('#submit_div').attr('style', 'height: 0; width: 0;');
+                    $('#btn-success').remove();
+                },
+            });
+        }
     }
 
     function getUserAnswers() {
@@ -106,17 +119,37 @@
 
 
     function lightAnswers(userAnswers, rightAnswers) {
-        lightRight(userAnswers, rightAnswers);
-        lightWrong(userAnswers, rightAnswers);
+        lightWrong(userAnswers);
+        lightRight(rightAnswers);
     }
 
-    function lightRight(userAnswers, rightAnswers) {
-
+    function lightRight(rightAnswers) {
+        for (let answers2question in rightAnswers) {
+            if (rightAnswers.hasOwnProperty(answers2question)) {
+                answers2question = rightAnswers[answers2question];
+                for (let answer in answers2question) {
+                    if (answers2question.hasOwnProperty(answer)) {
+                        answer = answers2question[answer];
+                        if (answer['is_right']) {
+                            let id = answer['id'];
+                            $("#answer" + id).closest("div").attr('style', 'background-color: ' + rightColor);
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    function lightWrong(userAnswers, rightAnswers) {
-
+    function lightWrong(userAnswers) {
+        userAnswers.forEach(answers2question => {
+            let checked = answers2question['checked'];
+            for (let i = 0; i < checked.length; i++) {
+                let id = checked[i];
+                $("#answer" + id).closest("div").attr('style', 'background-color: ' + wrongColor);
+            }
+        });
     }
+
 </script>
 
 
