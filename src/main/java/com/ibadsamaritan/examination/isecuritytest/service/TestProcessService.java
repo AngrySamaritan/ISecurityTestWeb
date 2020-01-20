@@ -1,12 +1,11 @@
 package com.ibadsamaritan.examination.isecuritytest.service;
 
+import com.ibadsamaritan.examination.isecuritytest.exceptions.NoSuchAnswerException;
 import com.ibadsamaritan.examination.isecuritytest.model.Answer;
-import com.ibadsamaritan.examination.isecuritytest.model.Question;
 import com.ibadsamaritan.examination.isecuritytest.repositories.AnswerRepo;
 import com.ibadsamaritan.examination.isecuritytest.repositories.QuestionRepo;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,23 +21,39 @@ public class TestProcessService {
         this.answerRepo = answerRepo;
     }
 
-    public String processAnswers(String answers) {
+    public String processAnswers(String answers) throws NoSuchAnswerException {
         JSONObject response = new JSONObject();
-        JSONArray answersJson = new JSONArray(answers);
+        response.put("status", "ok");
+        response.put("result", getResult(new JSONArray(answers)));
+        return response.toString();
+    }
+
+    private int getResult(JSONArray answersJson) throws NoSuchAnswerException {
         int result = 0;
         for (int i = 0; i < answersJson.length(); i++) {
             JSONObject answer = answersJson.getJSONObject(i);
             JSONArray checkedAnswer = answer.getJSONArray("checked");
             for (int j = 0; j < checkedAnswer.length(); j++) {
-                final Optional<Answer> answerOptional = answerRepo.findById(checkedAnswer.getLong(j));
-                if (answerOptional.isPresent()) {
-                    if (answerOptional.get().getRight()){
-                        result++;
-                    };
+                if (checkAnswer(checkedAnswer.getLong(j))) {
+                    result++;
                 }
             }
         }
-        response.put("result", result);
+        return result;
+    }
+
+    private boolean checkAnswer(Long answerId) throws NoSuchAnswerException {
+        final Optional<Answer> answerOptional = answerRepo.findById(answerId);
+        if (answerOptional.isPresent()) {
+            return (answerOptional.get().getRight());
+        } else throw new NoSuchAnswerException("No answer with id " + answerId + " in the database");
+    }
+
+    public String noSuchAnswer(Throwable e){
+        JSONObject response = new JSONObject();
+        response.put("status", "error");
+        response.put("error_code", "1000");
+        response.put("error_text", e.getMessage());
         return response.toString();
     }
 }

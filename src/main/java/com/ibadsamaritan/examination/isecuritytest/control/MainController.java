@@ -1,5 +1,6 @@
 package com.ibadsamaritan.examination.isecuritytest.control;
 
+import com.ibadsamaritan.examination.isecuritytest.exceptions.NoSuchAnswerException;
 import com.ibadsamaritan.examination.isecuritytest.service.QuestionsService;
 import com.ibadsamaritan.examination.isecuritytest.service.TestProcessService;
 import org.springframework.stereotype.Controller;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainController {
 
     final QuestionsService questionsService;
-    final TestProcessService testProcessService;
+    final TestProcessService processingTestService;
 
-    public MainController(QuestionsService questionsService, TestProcessService testProcessService) {
+    public MainController(QuestionsService questionsService, TestProcessService processingTestService) {
         this.questionsService = questionsService;
-        this.testProcessService = testProcessService;
+        this.processingTestService = processingTestService;
     }
 
     @GetMapping("/")
@@ -35,6 +36,10 @@ public class MainController {
     @ResponseBody
     @PostMapping("/test")
     public String processTest(@RequestParam(name = "data") String answers, Model model) {
-        return testProcessService.processAnswers(answers);
+        try {
+            return processingTestService.processAnswers(answers);
+        } catch (NoSuchAnswerException e) {
+            return processingTestService.noSuchAnswer(e);
+        }
     }
 }
