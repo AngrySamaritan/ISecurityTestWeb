@@ -1,0 +1,2 @@
+USE security_test;
+INSERT INTO questions(question_id, text) VALUES(1, 'The most dangerous type of corupted soft is');

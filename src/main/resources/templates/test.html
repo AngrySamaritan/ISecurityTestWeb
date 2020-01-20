@@ -28,20 +28,21 @@
 </div>
 
 <th:block th:each="question, qIt: ${questions}">
-    <form class="question" th:id="${qIt}">
+    <form class="question" th:id="${qIt.index} + 1">
         <div class="container">
-            <div class="row"><h3 th:text="'Question ' + ${qIt} + ':'"></h3></div>
-            <div class="row"><p th:text="${question.getText()}"></p></div>
+            <div class="row"><h3 th:text="'Question ' + ${qIt.index} + ':'"></h3></div>
+            <div class="row"><h4 th:text="${question.getText()}"></h4></div>
             <div class="container" th:each="answer, aIt: ${question.getAnswers()}">
                 <div class="row">
-                    <div class="col-3" th:if="${question.getType() == 'RADIO'}">
-                        <input type="radio" th:value="${qIt} * 100 + ${answer.getId()}">
+                    <div class="col-1"
+                         th:if="${question.getType()} == ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).RADIO}">
+                        <input type="radio" th:name="'answer2question' + ${qIt.index}" th:value="${qIt.index} * 100 + ${answer.getId()}">
                     </div>
-                    <div class="col-3" th:if="${question.getType() == 'CHECKBOX'}">
+                    <div class="col-1"
+                         th:if="${question.getType()} == ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).CHECKBOX}">
                         <input type="checkbox" class="answer" th:value="${answer.getId()}">
                     </div>
-                    <div class="col-1"><h5 th:text="${aIt}"></h5></div>
-                    <div class="col-8"><h5 th:text="${answer.getText()}"></h5></div>
+                    <div class="col-8"><h5 th:text="${aIt.index + 1} + '.' + ${answer.getText()}"></h5></div>
                 </div>
             </div>
         </div>
@@ -65,8 +66,8 @@
             map.set(id, checked);
             answers.push(map);
         });
-
-    //    TODO: add Ajax post to server;
+        alert(answers);
+        //    TODO: add Ajax post to server;
     }
 </script>
 

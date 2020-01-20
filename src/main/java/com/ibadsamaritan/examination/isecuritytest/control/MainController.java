@@ -1,9 +1,12 @@
 package com.ibadsamaritan.examination.isecuritytest.control;
 
 import com.ibadsamaritan.examination.isecuritytest.service.QuestionsService;
+import com.sun.deploy.security.ValidationState;
+import org.jboss.jandex.Type;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -22,7 +25,7 @@ public class MainController {
 
 
     @GetMapping("/test")
-    public String test(@RequestParam Model model) {
+    public String test(Model model) {
         model.addAttribute("questions", questionsService.getAllQuestions());
         return "test";
     }
