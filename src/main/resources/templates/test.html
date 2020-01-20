@@ -26,9 +26,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-2"></div>
-        <div class="col-8"><h1>Information security test by IBadSamaritan</h1></div>
+        <div class="col-8"><h1>Information security test by AngrySamaritan</h1></div>
         <div class="col-2"></div>
     </div>
+    <div class="row" style="margin-top: 10vh"></div>
 </div>
 
 <th:block th:each="question, qIt: ${questions}">
@@ -68,8 +69,8 @@
 <script>
     function submit() {
 
-        let data = getUserAnswers();
-        data = JSON.stringify(data);
+        let userAnswers = getUserAnswers();
+        let data = JSON.stringify(userAnswers);
 
         $.ajax({
             type: "POST",
@@ -80,7 +81,7 @@
             dataType: "json",
             success: function (data, status, jqXHR) {
                 alert("You gave " + data['result'] + " right answers");
-                lightAnswers()
+                lightAnswers(userAnswers, data['answers'])
             },
         });
     }
@@ -104,15 +105,16 @@
     }
 
 
-    function lightAnswers(user_answers, right_answers) {
+    function lightAnswers(userAnswers, rightAnswers) {
+        lightRight(userAnswers, rightAnswers);
+        lightWrong(userAnswers, rightAnswers);
+    }
+
+    function lightRight(userAnswers, rightAnswers) {
 
     }
 
-    function lightRight(right_answers) {
-
-    }
-
-    function lightWrong() {
+    function lightWrong(userAnswers, rightAnswers) {
 
     }
 </script>
