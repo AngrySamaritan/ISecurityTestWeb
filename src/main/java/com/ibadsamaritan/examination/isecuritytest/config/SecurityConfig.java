@@ -10,12 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public final int REMEMBER_ME_VAlID_TIME = 24 * 60 * 60 * 7;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/**").permitAll()
+                .and()
+                .csrf().disable();
     }
 }
