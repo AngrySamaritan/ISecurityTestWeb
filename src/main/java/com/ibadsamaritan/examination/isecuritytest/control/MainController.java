@@ -35,11 +35,7 @@ public class MainController {
 
     @ResponseBody
     @PostMapping("/test")
-    public String processTest(@RequestParam(name = "data") String answers, Model model) {
-        try {
-            return processingTestService.processAnswers(answers);
-        } catch (NoSuchAnswerException e) {
-            return processingTestService.noSuchAnswer(e);
-        }
+    public String processTest(@RequestParam(name = "data") String answers, Model model) throws NoSuchAnswerException {
+        return processingTestService.processAnswers(answers);
     }
 }

@@ -2,11 +2,14 @@ package com.ibadsamaritan.examination.isecuritytest.service;
 
 import com.ibadsamaritan.examination.isecuritytest.exceptions.NoSuchAnswerException;
 import com.ibadsamaritan.examination.isecuritytest.model.Answer;
+import com.ibadsamaritan.examination.isecuritytest.model.Question;
 import com.ibadsamaritan.examination.isecuritytest.repositories.AnswerRepo;
 import com.ibadsamaritan.examination.isecuritytest.repositories.QuestionRepo;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
 
 import java.util.Optional;
 
@@ -23,8 +26,8 @@ public class TestProcessService {
 
     public String processAnswers(String answers) throws NoSuchAnswerException {
         JSONObject response = new JSONObject();
-        response.put("status", "ok");
         response.put("result", getResult(new JSONArray(answers)));
+        response.put("answers", getAllAnswers());
         return response.toString();
     }
 
@@ -49,11 +52,23 @@ public class TestProcessService {
         } else throw new NoSuchAnswerException("No answer with id " + answerId + " in the database");
     }
 
-    public String noSuchAnswer(Throwable e){
-        JSONObject response = new JSONObject();
-        response.put("status", "error");
-        response.put("error_code", "1000");
-        response.put("error_text", e.getMessage());
-        return response.toString();
+    private JSONObject getAllAnswers() {
+        Iterable<Question> questions = questionRepo.findAll();
+        JSONObject answers = new JSONObject();
+        for (Question question: questions) {
+            answers.put(String.valueOf(question.getId()), getAnswersForQuestion(question));
+        }
+        return answers;
+    }
+
+    private JSONArray getAnswersForQuestion(Question question){
+        JSONArray answers = new JSONArray();
+        for(Answer answer: question.getAnswers()){
+            JSONObject answerJson = new JSONObject();
+            answerJson.put("id", answer.getId());
+            answerJson.put("is_right", answer.getRight());
+            answers.put(answerJson);
+        }
+        return answers;
     }
 }

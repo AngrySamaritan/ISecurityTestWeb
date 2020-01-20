@@ -68,8 +68,25 @@
 <script>
     function submit() {
 
+        let data = getUserAnswers();
+        data = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: "/test",
+            data: {
+                "data": data
+            },
+            dataType: "json",
+            success: function (data, status, jqXHR) {
+                alert("You gave " + data['result'] + " right answers");
+                lightAnswers()
+            },
+        });
+    }
+
+    function getUserAnswers() {
         let data = [];
-        console.log(typeof answers);
         $.each($('.question'), function () {
             let answers = {};
             let checked = [];
@@ -83,21 +100,20 @@
             answers['checked'] = checked;
             data.push(answers);
         });
-        //    TODO: add Ajax post to server;
-        data = JSON.stringify(data);
+        return data;
+    }
 
-        $.ajax({
-            type: "POST",
-            url: "/test",
-            data: {
-                "data": data
-            },
-            dataType: "json",
-            success: function (data, status, jqXHR) {
 
-                alert("You gave " + data['result'] + " right answers");
-            },
-        });
+    function lightAnswers(user_answers, right_answers) {
+
+    }
+
+    function lightRight(right_answers) {
+
+    }
+
+    function lightWrong() {
+
     }
 </script>
 
