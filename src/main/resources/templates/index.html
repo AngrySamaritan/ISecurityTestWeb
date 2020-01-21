@@ -25,18 +25,25 @@
         <div class="col-8"><h1>Information security test by AngrySamaritan</h1></div>
         <div class="col-2"></div>
     </div>
+    <div class="row" style="margin-top: 15vh">
+        <div class="col-3"></div>
+        <div class="col-6"><h5
+                th:text="'Test consist of ' + ${count} + ' questions. Every question have one right answer. Every right answer give you one point. Have fun!'"></h5>
+        </div>
+        <div class="col-3"></div>
+    </div>
 </div>
 
-<div class="container-fluid align-content-center" style="margin-top: 45vh" >
+<div class="container-fluid align-content-center" style="margin-top: 35vh">
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
-        <a href="/test" style="alignment: center">
-            <button style="height: 10vh; width: 30vw"
-                    class="button btn-primary">
-                Start Test
-            </button>
-        </a>
+            <a href="/test" style="alignment: center">
+                <button style="height: 10vh; width: 30vw"
+                        class="button btn-primary">
+                    Start Test
+                </button>
+            </a>
         </div>
         <div class="col-4"></div>
     </div>
