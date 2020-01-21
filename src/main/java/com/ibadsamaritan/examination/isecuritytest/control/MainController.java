@@ -24,6 +24,7 @@ public class MainController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("count", questionsService.getQuestionAmount());
+        model.addAttribute("nl", '\n');
         return "index";
     }
 

@@ -1,7 +1,7 @@
 USE security_test;
 DELETE FROM questions WHERE true;
 DELETE FROM answers WHERE true;
-INSERT INTO questions(question_id, text, type) VALUES(1, 'What is the most dangerous type of corrupted soft?', 'RADIO');
+INSERT INTO questions(question_id, text, type) VALUES(1, 'What is the most dangerous type of malware?', 'RADIO');
 INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (0, 'Trojan', true, 1);
 INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (1, 'Worm', false, 1);
 INSERT INTO answers(answer_id, text, is_right, question_id) VALUES (2, 'Spy soft', false, 1);

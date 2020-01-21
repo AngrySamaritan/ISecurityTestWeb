@@ -40,14 +40,16 @@
             <div class="container-fluid" th:each="answer, aIt: ${question.getAnswers()}">
                 <div class="row" style="vertical-align: center; " th:id="'answer' + ${answer.getId()}">
                     <div class="col-1"
-                         th:if="${question.getType()} == ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).RADIO}">
+                         th:if="${question.getType()} ==
+                          ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).RADIO}">
                         <input style="align-items: center" type="radio" th:name="'answer2question' + ${qIt.index}"
                                th:class="'answer2question' + ${question.getId()}"
                                th:value="${answer.getId()}"
                                th:id="'checker' + ${answer.getId()}">
                     </div>
                     <div class="col-1"
-                         th:if="${question.getType()} == ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).CHECKBOX}">
+                         th:if="${question.getType()} ==
+                         ${T(com.ibadsamaritan.examination.isecuritytest.model.Type).CHECKBOX}">
                         <input type="checkbox" th:class="'answer2question' + ${question.getId()}"
                                th:value="${answer.getId()}"
                                th:id="'checker' + ${answer.getId()}">
